@@ -1,12 +1,23 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
+import { getCurrencies } from './api/currencyApi'
 
 function App() {
   const [count, setCount] = useState(0)
 
+  useEffect(() => {
+    getCurrencies()
+      .then((currencies) => {
+        console.log('Currencies:', currencies)
+      })
+      .catch((error: unknown) => {
+        console.error('Failed to load currencies:', error)
+      })
+  }, [])
+  
   return (
     <>
       <section id="center">
