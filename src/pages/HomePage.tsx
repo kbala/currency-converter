@@ -1,47 +1,48 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { getCurrencies } from '../api/currencyApi'
+import { CurrencySelect } from '../components/CurrencySelect'
+import type { Currency } from '../types/currency'
 
 export function HomePage() {
-  useEffect(() => {
-    getCurrencies()
-      .then((currencies) => {
-        console.log('Currencies:', currencies)
-      })
-      .catch((error: unknown) => {
-        console.error('Failed to load currencies:', error)
-      })
-  }, [])
+
+    const [currencies, setCurrencies] = useState<Currency[]>([])
+    const [fromCurrency, setFromCurrency] = useState('GBP')
+    const [toCurrency, setToCurrency] = useState('EUR')
+
+
+    const loadCurrencies = async () => {
+        try {
+            const currencies = await getCurrencies()
+            setCurrencies(currencies)
+        } catch (error) {
+            console.error('Failed to load currencies:', error)
+        }
+    }
+
+    useEffect(() => {
+        loadCurrencies()
+    }, [])
+
 
   return (
     <main>
       <h1>Currency converter</h1>
-
-      <p>
-        <label>
-          Amount <input value="1" readOnly />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <label style={{ width: '80px', textAlign: 'right' }}>From</label>
+        <CurrencySelect id="currency-from" value={fromCurrency} currencies={currencies} onChange={setFromCurrency} />
+        <label style={{ width: '80px', boxSizing: 'border-box' }}>
+            Amount
         </label>
-      </p>
-      <p>
-        <label>
-          From{' '}
-          <select disabled defaultValue="GBP">
-            <option value="GBP">GBP</option>
-          </select>
+        <input type="number"/>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <label style={{ width: '80px', textAlign: 'right' }}>To</label>
+        <CurrencySelect id="currency-to" value={toCurrency} currencies={currencies} onChange={setToCurrency} />
+        <label style={{ width: '80px', boxSizing: 'border-box' }}>
+            Converted 
         </label>
-      </p>
-      <p>
-        <label>
-          Converted <input value="" readOnly />
-        </label>
-      </p>
-      <p>
-        <label>
-          To{' '}
-          <select disabled defaultValue="EUR">
-            <option value="EUR">EUR</option>
-          </select>
-        </label>
-      </p>
+        <input value="1" readOnly />
+      </div>
     </main>
   )
 }
