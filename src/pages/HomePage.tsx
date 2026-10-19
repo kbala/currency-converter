@@ -50,7 +50,11 @@ export function HomePage() {
     }, [])
 
     useEffect(() => {
-        convertCurrencyValue(fromCurrency, toCurrency, Number(amount))
+        //debounce added to prevent multiple calls to the API
+        const timer = window.setTimeout(() => {
+            void convertCurrencyValue(fromCurrency, toCurrency, Number(amount))
+          }, 500)
+        return () => clearTimeout(timer)
     }, [fromCurrency, toCurrency, amount, currencies.length])
 
 
