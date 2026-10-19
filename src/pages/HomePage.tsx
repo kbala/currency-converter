@@ -29,10 +29,15 @@ export function HomePage() {
     const convertCurrencyValue = async (fromCurrency: string, toCurrency: string, amount: number) => {
         if (amount === 0 || currencies.length === 0) {
             setConverted('')
+            return
         }
         try {
             const convertedAmount = await convertCurrency(fromCurrency, toCurrency, amount)
+            if(convertedAmount) {
                 setConverted(String(convertedAmount))
+            } else {
+                setConverted('')
+            }
         } catch (error) {
             console.error('Failed to convert:', error)
             setConverted('')
