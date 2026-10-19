@@ -1,32 +1,39 @@
-# React + TypeScript + Vite
+# Currency converter
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A simple React app that converts an amount from one currency to another using the CurrencyBeacon (https://currencybeacon.com) API.
 
-Currently, two official plugins are available:
+## Steps to run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Clone the repository and open the folder.
+2. Create a free account at https://currencybeacon.com and copy the API token from the dashboard.
+3. Create your env file and paste the token:
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+cp .env.example .env
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+```text
+VITE_CURRENCYBEACON_API_KEY=your_token_here
+```
+
+4. Install dependencies and start the app:
+
+```bash
+npm install
+npm run dev
+```
+
+5. Open http://localhost:5173
+
+The page loads the currency list, defaults From to GBP and To to EUR, and converts the amount you enter.
+
+
+## Features
+
+1. Currencies list has been stored in to sessionStorage to avoid repeated fetch.
+2. Debounce added to avoid too many convertion request
+
+## To Do
+
+1. Style the component
+2. Create Common UI component for the flex rows (From & To) to avoid duplication.

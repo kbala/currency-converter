@@ -24,7 +24,7 @@ export interface CurrencyRecord {
     subunit: number
 }
 
-export interface CurrenciesPayload {
+export interface CurrenciesResponsePayload {
     meta: ApiMeta
     response: CurrencyRecord[]
 }
@@ -47,3 +47,14 @@ export interface CurrenciesPayload {
 //         "decimal_mark": ".",
 //         "thousands_separator": ","
 //     },
+
+
+export interface ConvertResponsePayload {
+    meta: ApiMeta
+    response: {
+      from: string
+      to: string
+      amount: number
+      value: number
+    }
+  }

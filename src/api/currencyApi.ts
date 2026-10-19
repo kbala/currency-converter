@@ -1,5 +1,5 @@
 import { currencyBeaconAPI } from './client'
-import type { Currency, CurrencyRecord } from '../types/currency'
+import type { Currency, CurrencyRecord, CurrenciesResponsePayload, ConvertResponsePayload } from '../types/currency'
 
 
 export async function getCurrencies() {
@@ -9,7 +9,7 @@ export async function getCurrencies() {
             return JSON.parse(cachedCurrencies)
         }
         
-        const { data } = await currencyBeaconAPI.get('/currencies')
+        const { data } = await currencyBeaconAPI.get<CurrenciesResponsePayload>('/currencies')
         if(data.meta.code !== 200 || !Array.isArray(data.response)) {
             throw new Error('Error: Could not load currencies')
         }
@@ -34,7 +34,7 @@ export async function getCurrencies() {
 
 export async function convertCurrency(from: string, to: string, amount: number) {
   try {
-    const { data } = await currencyBeaconAPI.get('/convert', {
+    const { data } = await currencyBeaconAPI.get<ConvertResponsePayload>('/convert', {
         params: { from, to, amount },
     })
     if (data.meta?.code !== 200 || typeof data.response?.value !== 'number') {
