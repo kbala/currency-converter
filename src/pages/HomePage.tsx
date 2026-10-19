@@ -10,6 +10,8 @@ export function HomePage() {
     const [toCurrency, setToCurrency] = useState('EUR')
     const [amount, setAmount] = useState('')
     const [converted, setConverted] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
+
 
     const handleAmountChange = (value: string) => {
         if (value === '' || /^\d*\.?\d*$/.test(value)) {
@@ -22,7 +24,7 @@ export function HomePage() {
             const currencies = await getCurrencies()
             setCurrencies(currencies)
         } catch (error) {
-            console.error('Failed to load currencies:', error)
+            setErrorMessage((error as Error).message)
         }
     }
     
@@ -39,17 +41,16 @@ export function HomePage() {
                 setConverted('')
             }
         } catch (error) {
-            console.error('Failed to convert:', error)
-            setConverted('')
+            setErrorMessage((error as Error).message)
         }
     }
-
 
     useEffect(() => {
             loadCurrencies()
     }, [])
 
     useEffect(() => {
+        setErrorMessage('')
         //debounce added to prevent multiple calls to the API
         const timer = window.setTimeout(() => {
             void convertCurrencyValue(fromCurrency, toCurrency, Number(amount))
@@ -84,6 +85,7 @@ export function HomePage() {
         </label>
         <input readOnly value={converted} />
       </div>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </main>
   )
 }
