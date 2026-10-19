@@ -20,3 +20,16 @@ export async function getCurrencies() {
   }))
   .sort((a: Currency, b: Currency) => a.name.localeCompare(b.name))
 }
+
+
+export async function convertCurrency(from: string, to: string, amount: number) {
+  const { data } = await currencyBeaconAPI.get('/convert', {
+    params: { from, to, amount },
+  })
+
+  if (data.meta?.code !== 200 || typeof data.response?.value !== 'number') {
+    throw new Error('Could not convert this amount')
+  }
+
+  return data.response.value
+}
